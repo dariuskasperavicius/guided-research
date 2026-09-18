@@ -1,84 +1,84 @@
 ---
 name: guided-research
-description: "Глубокое исследование (deep research) любой темы по фиксированному алгоритму: сначала сбор вводных через управляемый диалог с пользователем, затем исследование, затем отчёт в .md. Для конкурентного анализа, исследования аудитории и болей, рынка, ниши, технологии, темы для контента. Срабатывай на: «исследуй», «проведи ресерч», «проанализируй конкурентов/рынок/аудиторию», «собери боли пользователей», «изучи тему», «подготовь отчёт по…»; триггер-слова: research, deep research, исследование, отчёт. Скилл универсальный — для любых исследовательских задач, где результат — отчёт или рекомендации. НЕ используй для разового фактчека на 1–2 предложения и для написания кода."
+description: "Deep research on any topic using a fixed process: first gather inputs through a guided dialogue with the user, then conduct the research, then produce a Markdown report. Use for competitive analysis, audience and pain-point research, market, niche, or technology research, and content-topic research. Trigger on requests such as: ‘research this,’ ‘conduct research,’ ‘analyze the competitors/market/audience,’ ‘collect user pain points,’ ‘study this topic,’ or ‘prepare a report on…’; trigger words include: research, deep research, study, and report. This skill is universal for research tasks whose outcome is a report or recommendations. DO NOT use it for a one-off fact-check that can be answered in 1–2 sentences or for writing code."
 ---
 
 # Guided Research
 
-## Задача
+## Objective
 
-Провести глубокое исследование темы пользователя и выдать отчёт в .md. Тема — любая: конкуренты, аудитория и её боли, рынок, ниша, технология, тема для контента.
+Conduct in-depth research on the user's topic and deliver a Markdown report. The topic can be anything: competitors, an audience and its pain points, a market, a niche, a technology, or a content topic.
 
-Исследование выполняй строго по алгоритму ниже. Ключевой принцип: качество исследования на 80% определяется качеством вводных, а пользователь сам редко умеет их дать. Поэтому НЕ начинай исследовать сразу — сначала проведи пользователя по шагам 1–5 (сбор вводных: цель, контекст, структура, стиль, источники), и только потом исследуй (шаг 6) и пиши отчёт (шаг 7). На шагах 1–5 ты ведёшь диалог: задаёшь вопросы с вариантами ответов через ask_user, а не ждёшь, что пользователь сам всё сформулирует.
+Follow the process below strictly. The key principle is that 80% of research quality is determined by the quality of the inputs, and users rarely know how to provide those inputs on their own. Therefore, DO NOT begin researching immediately. First guide the user through steps 1–5 to gather inputs: objective, context, structure, style, and sources. Only then conduct the research in step 6 and write the report in step 7. During steps 1–5, lead the dialogue by asking questions with answer options through `ask_user`; do not wait for the user to formulate everything independently.
 
-Результат — ВСЕГДА отчёт в формате .md, сохранённый в папку `reports/` текущего проекта (создай папку, если её нет) с понятным именем на языке запроса, например `reports/исследование_конкурентов_трекер_видео.md`. После сохранения покажи/отдай файл пользователю.
+The result is ALWAYS a `.md` report saved in the current project's `reports/` directory. Create the directory if it does not exist. Use a clear filename in the language of the request, for example `reports/competitor_research_video_tracker.md`. After saving it, show or provide the file to the user.
 
-## Алгоритм
+## Process
 
-Жёсткий лимит прерываний пользователя: 3–4 за весь сценарий (цель → контекст одним экраном → структура+стиль+источники одним экраном → отчёт). Больше — раздражает, меньше — отчёт станет общим. Все вопросы с вариантами задавай через ask_user.
+Hard limit on user interruptions: 3–4 across the entire workflow (objective → context on one screen → structure + style + sources on one screen → report). More interruptions are frustrating; fewer will make the report too generic. Ask every multiple-choice question through `ask_user`.
 
-## Шаг 1. Цель — сформулируй ВМЕСТЕ с пользователем
+## Step 1. Objective — formulate it TOGETHER with the user
 
-Самый важный шаг.
+This is the most important step.
 
-1. Спроси цель исследования. Тема («исследуй конкурентов») — НЕ цель, а объект. Переформулируй по формуле: «Я хочу [действие/решение], чтобы [результат], для этого мне нужно понять [что узнать]».
-2. Предложи через ask_user 2–3 варианта формулировки на основе того, что написал пользователь. Пользователь выбирает или правит.
-3. Зафиксируй цель ОДНИМ предложением. Она станет первым экраном отчёта и фильтром отбора: всё, что не работает на цель, в отчёт не идёт.
+1. Ask for the research objective. A topic such as “research the competitors” is NOT an objective; it is the subject. Reframe it using this formula: “I want to [action/decision] so that [outcome]; to do that, I need to understand [what must be learned].”
+2. Based on what the user wrote, offer 2–3 candidate formulations through `ask_user`. The user selects one or edits it.
+3. Record the objective in ONE sentence. It will become the first screen of the report and the inclusion filter: anything that does not serve the objective does not belong in the report.
 
-Пример: плохая цель — «исследуй рынок кофеен»; хорошая — «решаю, открывать ли кофейню в районе X, нужно понять спрос, конкурентов и свободные ценовые ниши».
+Example: a poor objective is “research the coffee-shop market”; a good objective is “I am deciding whether to open a coffee shop in neighborhood X, and I need to understand demand, competitors, and unoccupied price segments.”
 
-## Шаг 2. Контекст — сгенерируй вопросы под цель
+## Step 2. Context — generate questions based on the objective
 
-Сгенерируй 4–6 вопросов ИСХОДЯ из зафиксированной цели (не фиксированный список). Правила генерации:
+Generate 4–6 questions BASED ON the confirmed objective; do not use a fixed list. Generation rules:
 
-- Каждый вопрос должен менять содержание отчёта; если ответ ни на что не влияет — не спрашивай.
-- Покрой оси, релевантные типу цели: объект/предмет, аудитория, география/язык, ограничения, известные пользователю факты, «как это решается сейчас».
-- Давай 2–4 варианта ответа кнопками через ask_user, где возможно.
+- Every question must change the report's content. If an answer would not affect anything, do not ask the question.
+- Cover the dimensions relevant to the type of objective: object/subject, audience, geography/language, constraints, facts already known to the user, and “how this is currently solved.”
+- Where possible, provide 2–4 selectable answer options through `ask_user`.
 
-Задай всё за ОДИН вызов ask_user (максимум два захода). Не допрашивай по кругу. То, что пользователь уже указал в первом сообщении, не переспрашивай.
+Ask all questions in ONE `ask_user` call, with at most two rounds. Do not interrogate the user repeatedly. Do not ask again for information the user already provided in the first message.
 
-## Шаг 3. Структура отчёта + демо-фрагмент
+## Step 3. Report structure + demo excerpt
 
-1. Покажи скелет отчёта, подстроенный под цель: разделы зависят от цели, а не фиксированы. База — пирамида: выводы первыми, потом доказательства.
-2. Напиши ОДИН демо-фрагмент (2–3 строки характерного блока: кусок сравнительной таблицы, одна находка с источником, один вывод с обоснованием) и спроси «в таком формате ок?». Это дешёвая проверка ДО траты времени на исследование — не пропускай.
+1. Show a report outline tailored to the objective. Sections must depend on the objective rather than being fixed. Use a pyramid structure by default: conclusions first, then evidence.
+2. Write ONE demo excerpt: 2–3 lines from a representative block, such as part of a comparison table, one finding with a source, or one conclusion with its rationale. Ask, “Is this format okay?” This is a low-cost validation BEFORE spending time on research; do not skip it.
 
-## Шаг 4. Стиль — предложи, не спрашивай открыто
+## Step 4. Style — offer options; do not ask an open-ended question
 
-Через ask_user вариантами: «пирамида + таблицы + схемы» (дефолт), «короткая выжимка на 1–2 страницы», «максимально глубокий лонгрид».
+Use `ask_user` to offer these choices: “pyramid structure + tables + diagrams” (default), “brief 1–2 page summary,” or “maximally detailed long-form report.”
 
-## Шаг 5. Источники — спроси про упор
+## Step 5. Sources — ask what to emphasize
 
-Через ask_user вариантами: «голос реальных людей (форумы, Reddit, X, отзовики, чаты)», «официальные данные, статистика, исследования», «то, что публикуют сами игроки (сайты, реклама, контент)», «всё вместе». Выбор меняет поисковые паттерны — учти это на шаге 6. Шаги 3–5 объединяй в один экран.
+Use `ask_user` to offer these choices: “voices of real people (forums, Reddit, X, review sites, chats),” “official data, statistics, and studies,” “what the market participants publish themselves (websites, ads, content),” or “all of the above.” The choice changes the search patterns, so apply it in step 6. Combine steps 3–5 on one screen.
 
-## Шаг 6. Исследование
+## Step 6. Research
 
-Запусти цикл глубокого исследования: 10+ поисковых шагов. После каждого раунда — короткий Thinking + Summary: что нашёл, чего не хватает, что дальше. Паттерны поиска подбери под выбранный упор источников и язык/географию: для «голоса людей» — запросы к форумам, Reddit, отзовикам на языке рынка; для официальных данных — статистика и отчёты; для «сами игроки» — сайты, реклама, контент игроков.
+Run a deep-research loop with 10+ search steps. After each round, provide a brief Thinking + Summary: what you found, what is missing, and what comes next. Adapt search patterns to the selected source emphasis and the relevant language/geography. For “voices of real people,” search forums, Reddit, and review sites in the market's language. For official data, search statistics and reports. For “market participants themselves,” search their websites, ads, and content.
 
-Жёсткие правила:
+Hard rules:
 
-- Цитаты — только дословно + источник.
-- Слабые места игроков ищи в негативных отзывах.
-- Ищи, «как люди решают задачу сейчас без готовых решений».
-- НИЧЕГО не выдумывай: нет данных — так и напиши.
+- Quotes must be verbatim and include a source.
+- Find participants' weaknesses in negative reviews.
+- Investigate “how people currently solve the problem without ready-made solutions.”
+- Invent NOTHING. If data is unavailable, say so explicitly.
 
-## Шаг 7. Отчёт → .md в reports/
+## Step 7. Report → `.md` in `reports/`
 
-Собери отчёт по структуре, утверждённой на шаге 3, в выбранном стиле. Первый экран — цель одним предложением. Пройди чек-лист, затем сохрани файл в `reports/` и отдай пользователю.
+Assemble the report using the structure approved in step 3 and the selected style. The first screen must contain the objective in one sentence. Complete the checklist, then save the file in `reports/` and provide it to the user.
 
-Чек-лист перед сохранением:
+Checklist before saving:
 
-- Отчёт отвечает на зафиксированную цель (шаг 1) — проверь дословно.
-- Каждый вывод и рекомендация отвечает на вопрос «как к этому пришли».
-- Каждая цифра и цитата имеет источник; цитаты без искажений.
-- Пирамида соблюдена, есть таблицы и, где уместно, схемы.
-- Структура — та, что пользователь утвердил на шаге 3.
+- The report answers the confirmed objective from step 1; verify this literally.
+- Every conclusion and recommendation answers the question, “How was this derived?”
+- Every number and quote has a source; quotes are not distorted.
+- The pyramid structure is preserved, with tables and, where appropriate, diagrams.
+- The structure is the one the user approved in step 3.
 
-## Жёстко зашито (не нарушать)
+## Hardcoded requirements (do not violate)
 
-- Формула цели из шага 1 — одним предложением.
-- Правила генерации вопросов из шага 2.
-- Правило демо-фрагмента — обязательно до старта исследования.
-- Чек-лист качества из шага 7 — перед каждым сохранением.
-- «Цитаты дословно», «не выдумывать», «результат всегда .md в reports/».
+- The objective formula from step 1, expressed in one sentence.
+- The question-generation rules from step 2.
+- The demo-excerpt rule: mandatory before research begins.
+- The quality checklist from step 7: required before every save.
+- “Quotes must be verbatim,” “invent nothing,” and “the result is always a `.md` file in `reports/`.”
 
-Всё остальное генерируй под задачу каждый раз заново.
+Generate everything else from scratch for each task.

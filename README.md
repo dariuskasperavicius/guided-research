@@ -1,35 +1,35 @@
 # Guided Research
 
-Скилл для AI-агентов (Claude Code, Kimi Code CLI и других, поддерживающих формат `SKILL.md`): глубокое исследование любой темы по фиксированному алгоритму — сначала сбор вводных через управляемый диалог, затем исследование, затем отчёт в `.md`.
+A skill for AI agents (Claude Code, Kimi Code CLI, and others that support the `SKILL.md` format): in-depth research on any topic using a fixed process—first gathering input through a guided dialogue, then conducting the research, and finally producing a `.md` report.
 
-## Что делает
+## What It Does
 
-Проводит deep research темы и выдаёт структурированный отчёт:
+It conducts in-depth research on a topic and produces a structured report covering areas such as:
 
-- конкурентный анализ
-- исследование аудитории и болей пользователей
-- анализ рынка, ниши, технологии
-- сбор материала по теме для контента
+- Competitive analysis
+- Audience research and user pain points
+- Market, niche, and technology analysis
+- Gathering source material on a topic for content creation
 
-**Ключевая идея:** качество исследования на 80% определяется качеством вводных, а пользователь редко умеет их дать сам. Поэтому скилл не начинает исследовать сразу — сначала ведёт пользователя по шагам сбора вводных (цель → контекст → структура → стиль → источники), задавая вопросы с вариантами ответов, и только потом исследует.
+**Core idea:** 80% of research quality depends on the quality of the input, yet users rarely know how to provide that input on their own. That is why the skill does not begin researching immediately. It first guides the user step by step through gathering the necessary input (goal → context → structure → style → sources), asking questions with suggested answers, and only then begins the research.
 
-## Как работает
+## How It Works
 
-1. **Цель** — формулируется вместе с пользователем по формуле: «Я хочу [действие], чтобы [результат], для этого мне нужно понять [что]». Тема («исследуй конкурентов») — не цель, а объект.
-2. **Контекст** — 4–6 вопросов, сгенерированных под конкретную цель (не фиксированный список).
-3. **Структура отчёта + демо-фрагмент** — скелет отчёта и один пример блока, чтобы проверить формат до траты времени на исследование.
-4. **Стиль** — пирамида + таблицы + схемы / короткая выжимка / глубокий лонгрид.
-5. **Источники** — голос реальных людей (форумы, Reddit, отзовики) / официальные данные / то, что публикуют сами игроки / всё вместе.
-6. **Исследование** — 10+ поисковых шагов, после каждого раунда — короткий анализ: что нашёл, чего не хватает.
-7. **Отчёт** — `.md` в папке `reports/` проекта. Цитаты только дословно и с источником, ничего не выдумывается.
+1. **Goal** — defined together with the user using the formula: “I want to [action] so that [outcome]; to do that, I need to understand [what].” A topic (“research competitors”) is not a goal; it is the subject of the research.
+2. **Context** — 4–6 questions generated for the specific goal, rather than a fixed list.
+3. **Report structure + sample section** — a report outline and one example section to validate the format before spending time on research.
+4. **Style** — pyramid structure + tables + diagrams / concise summary / in-depth long-form report.
+5. **Sources** — the voices of real people (forums, Reddit, review sites) / official data / content published by market participants themselves / all of the above.
+6. **Research** — 10+ search steps, followed after each round by a brief assessment of what was found and what is still missing.
+7. **Report** — a `.md` file in the project's `reports/` directory. Quotes are always verbatim and attributed to their sources; nothing is fabricated.
 
-Лимит прерываний пользователя: 3–4 за весь сценарий — больше раздражает, меньше делает отчёт общим.
+The user is interrupted only 3–4 times throughout the entire workflow: more interruptions become frustrating, while fewer lead to a generic report.
 
-## Установка
+## Installation
 
-### Вариант 1: скопировать в папку скиллов
+### Option 1: Copy It to Your Skills Directory
 
-Склонируйте репозиторий и скопируйте скилл в директорию скиллов вашего агента:
+Clone the repository and copy the skill into your agent's skills directory:
 
 ```bash
 git clone https://github.com/abbnv/guided-research.git
@@ -37,17 +37,17 @@ mkdir -p ~/.agents/skills/guided-research
 cp guided-research/SKILL.md ~/.agents/skills/guided-research/SKILL.md
 ```
 
-Поддерживаемые расположения зависят от вашего агента:
+Supported locations depend on your agent:
 
-| Агент | Путь |
+| Agent | Path |
 |---|---|
-| Kimi Code CLI / универсально | `~/.agents/skills/guided-research/` |
-| Claude Code (пользовательский уровень) | `~/.claude/skills/guided-research/` |
-| Claude Code (уровень проекта) | `.claude/skills/guided-research/` в корне проекта |
+| Kimi Code CLI / universal | `~/.agents/skills/guided-research/` |
+| Claude Code (user level) | `~/.claude/skills/guided-research/` |
+| Claude Code (project level) | `.claude/skills/guided-research/` in the project root |
 
-### Вариант 2: только файл
+### Option 2: Download the File Only
 
-Нужен единственный файл — `SKILL.md`. Скачайте его и положите в папку скиллов:
+You only need one file: `SKILL.md`. Download it and place it in your skills directory:
 
 ```bash
 mkdir -p ~/.agents/skills/guided-research
@@ -55,22 +55,22 @@ curl -o ~/.agents/skills/guided-research/SKILL.md \
   https://raw.githubusercontent.com/abbnv/guided-research/main/SKILL.md
 ```
 
-## Использование
+## Usage
 
-После установки скилл срабатывает на запросы вроде:
+After installation, the skill responds to requests such as:
 
-- «исследуй конкурентов»
-- «проведи ресерч рынка X»
-- «собери боли пользователей продукта Y»
-- «подготовь отчёт по теме Z»
+- “Research my competitors”
+- “Conduct market research on X”
+- “Identify the pain points of product Y's users”
+- “Prepare a report on topic Z”
 
-Агент начнёт с вопросов для сбора вводных — отвечайте на них, это сильно повышает качество итогового отчёта.
+The agent will begin by asking questions to gather input. Answering them greatly improves the quality of the final report.
 
-## Когда НЕ подходит
+## When It Is NOT a Good Fit
 
-- Разовый фактчек на 1–2 предложения
-- Написание кода
+- A one-off fact-check requiring only 1–2 sentences
+- Writing code
 
-## Лицензия
+## License
 
 MIT
